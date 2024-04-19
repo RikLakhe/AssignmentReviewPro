@@ -9,9 +9,10 @@ from database import get_db
 
 router = APIRouter()
 
+
 # Example route to retrieve users (replace with your actual logic)
 @router.get("/users", response_model=List[UserDTO])
 async def get_users(db: Session = Depends(get_db)):
     """Retrieves a list of users from the database."""
     user_service = UserService()
-    return user_service.get_users(db)
+    return user_service.get_users()

@@ -9,8 +9,8 @@ class UserService:
         pass
 
     def get_users(self) -> List[UserDTO]:
-        db = get_db()
-        users = db.query(User).all()
-        return [UserDTO(**user.__dict__) for user in users]  # Convert to DTOs
+        for db in get_db():
+            users = db.query(User).all()
+            return [UserDTO(**user.__dict__) for user in users]  # Convert to DTOs
 
     # Add other user service methods (create, update, delete)
