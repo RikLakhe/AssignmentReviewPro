@@ -49,7 +49,34 @@ document.addEventListener('DOMContentLoaded', function () {
         if (file && file.type === 'application/pdf') {
             // Valid PDF file
             messageDiv.innerHTML = '';
-            uploadFile(file);
+            const formData = new FormData();
+            formData.append('user_id', userId)
+            formData.append('user_email', userEmail)
+            formData.append('file', fileInput.files[0])
+
+                // Display formData for debugging (optional)
+                for (var pair of formData.entries()) {
+                    console.log(pair[0]+ ', ' + pair[1]);
+                }
+
+                fetch('/api/v1/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                    messageDiv.innerHTML = '<p class="text-success">' + data.message + '</p>';
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    messageDiv.innerHTML = '<p class="text-danger">Error uploading file. Please try again.</p>';
+                });
         } else {
             // Not a PDF file
             messageDiv.innerHTML = '<p style="color: red;">Please upload a valid PDF file.</p>';
